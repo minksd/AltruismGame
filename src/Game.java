@@ -30,7 +30,7 @@ public class Game {
 
 	public void runGame() {
 		while (currentTick < maxTick) {
-/* 			System.out.println("\nCurrent Tick: " + currentTick + '\n');
+/* 			System.out.println("\nCurrent Tick: " + currentTick + "\n");
 			for (Agent agent : agents) {
 				System.out.println(agent.getResources());
 			} */
@@ -43,7 +43,7 @@ public class Game {
 		}
 
 		for (Agent agent : agents) {
-			System.out.println('\n' + agent.getPercentageWar() + "% : " + agent.getResources());
+			System.out.println(agent.getPercentageWar() + "% : " + agent.getResources());
 		}
 	}
 

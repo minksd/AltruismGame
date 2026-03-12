@@ -1,7 +1,7 @@
 import java.util.Random;
 
 public class GeneticAlgorithm {
-	private int numGenerations = 1000;
+	private int numGenerations = 10000;
 	private int mutationRate = 20;
 	private int numAgents = 25;
 	private int numTicks = 50;
