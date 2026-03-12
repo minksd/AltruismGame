@@ -1,10 +1,10 @@
 import java.util.Random;
 
 public class GeneticAlgorithm {
-	private int numGenerations = 2;
-	private int mutationRate = 1;
-	private int numAgents = 10;
-	private int numTicks = 25;
+	private int numGenerations = 1000;
+	private int mutationRate = 20;
+	private int numAgents = 25;
+	private int numTicks = 50;
 	private Agent[] agents;
 	private Random rand = new Random();
 

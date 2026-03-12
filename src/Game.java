@@ -30,10 +30,10 @@ public class Game {
 
 	public void runGame() {
 		while (currentTick < maxTick) {
-			System.out.println("\nCurrent Tick: " + currentTick + '\n');
+/* 			System.out.println("\nCurrent Tick: " + currentTick + '\n');
 			for (Agent agent : agents) {
 				System.out.println(agent.getResources());
-			}
+			} */
 			updateTiles();
 			clearTiles();
 			moveAgents();
@@ -77,31 +77,44 @@ public class Game {
 	}
 
 	private HashMap<Agent, Float> calcOutcome(Tile tile) {
+		HashMap<Agent, Float> outcome = new HashMap<>();
+
+		int occupants = tile.getOccupants().size();
+		if (occupants == 0) {
+			return outcome;
+		}
+
 		int numWar = 0;
-		int numPeace = 0;
-		HashMap<Agent, Float> outcome = new HashMap<Agent, Float>();
+		for (Agent agent : tile.getOccupants()) {
+			if (agent.getChoice(currentTick) == Choice.War) {
+				numWar++;
+			}
+		}
+
 		float availableResources = tile.getResources();
 
-		for (Agent agent : tile.getOccupants()) {
-			Choice choice = agent.getChoice(currentTick);
-			if (choice == Choice.War)
-				numWar++;
-			if (choice == Choice.Peace)
-				numPeace++;
-		}
+		float totalHarvest = Math.min(availableResources, occupants * maxHarvestable);
+
 		if (numWar == 0) {
+			float rewardPerAgent = totalHarvest / occupants;
+
 			for (Agent agent : tile.getOccupants()) {
-				outcome.put(agent, availableResources / tile.getOccupants().size());
+				outcome.put(agent, rewardPerAgent);
 			}
 		} else {
+			float totalReward = totalHarvest / 2.0f;
+			float rewardPerWarAgent = totalReward / numWar;
+
 			for (Agent agent : tile.getOccupants()) {
 				if (agent.getChoice(currentTick) == Choice.War) {
-					outcome.put(agent, (availableResources / (2 * numWar)));
+					outcome.put(agent, rewardPerWarAgent);
 				} else {
 					outcome.put(agent, 0f);
 				}
 			}
 		}
+
+		tile.harvest(totalHarvest);
 		return outcome;
 	}
 
@@ -111,11 +124,11 @@ public class Game {
 		}
 	}
 
-	private void clearTiles(){
+	private void clearTiles() {
 		for (Tile[] row : grid) {
 			for (Tile tile : row) {
 				tile.clearOccupants();
 			}
-    	}
+		}
 	}
 }

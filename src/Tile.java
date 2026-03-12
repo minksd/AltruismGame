@@ -2,8 +2,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Tile {
-    private int baseResources;
-    private int numResources;
+    private float baseResources;
+    private float numResources;
     private int refreshTime = 3;
     private List<Agent> occupants = new ArrayList<Agent>();
     private int lastUpdated = 0;
@@ -13,11 +13,11 @@ public class Tile {
 	this.numResources = baseResources;
     }
 
-    public int getResources(){
+    public float getResources(){
 	return numResources;
     }
 
-    public int harvest(int amount){
+    public float harvest(float amount){
 	if (amount > numResources){
 	    numResources = 0;
 	    return numResources;
