@@ -1,10 +1,10 @@
 import java.util.Random;
 
 public class GeneticAlgorithm {
-	private int numGenerations = 1000;
+	private int numGenerations = 2;
 	private int mutationRate = 1;
 	private int numAgents = 10;
-	private int numTicks = 1000;
+	private int numTicks = 25;
 	private Agent[] agents;
 	private Random rand = new Random();
 
@@ -54,6 +54,7 @@ public class GeneticAlgorithm {
 		Agent[] parents = { agents[0], agents[1] };
 		for (int i = 2; i < agents.length; i++) {
 			if (agents[i].getResources() > parents[0].getResources()) {
+				parents[1] = parents[0];
 				parents[0] = agents[i];
 			} else if (agents[i].getResources() > parents[1].getResources()) {
 				parents[1] = agents[i];

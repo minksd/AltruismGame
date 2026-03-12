@@ -39,4 +39,8 @@ public class Tile {
     public List<Agent> getOccupants(){
 	return occupants;
     }
+
+    public void clearOccupants(){
+        occupants.clear();
+    }
 }

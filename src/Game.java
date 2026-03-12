@@ -4,7 +4,7 @@ import java.util.Random;
 public class Game {
 	private int maxHarvestable = 5;
 	private Tile[][] grid;
-	private int currentTick;
+	private int currentTick = 0;
 	private int maxTick;
 	private Agent[] agents;
 
@@ -29,14 +29,21 @@ public class Game {
 	}
 
 	public void runGame() {
-		while (++currentTick < maxTick) {
+		while (currentTick < maxTick) {
+			System.out.println("\nCurrent Tick: " + currentTick + '\n');
+			for (Agent agent : agents) {
+				System.out.println(agent.getResources());
+			}
 			updateTiles();
+			clearTiles();
 			moveAgents();
 			HashMap<Agent, Float> outcomes = calcOutcomes();
 			distributeResources(outcomes);
+			currentTick++;
 		}
+
 		for (Agent agent : agents) {
-			System.out.println(agent.getPercentageWar() + "% : " + agent.getResources());
+			System.out.println('\n' + agent.getPercentageWar() + "% : " + agent.getResources());
 		}
 	}
 
@@ -102,5 +109,13 @@ public class Game {
 		for (Agent agent : outcomes.keySet()) {
 			agent.updateResource(outcomes.get(agent));
 		}
+	}
+
+	private void clearTiles(){
+		for (Tile[] row : grid) {
+			for (Tile tile : row) {
+				tile.clearOccupants();
+			}
+    	}
 	}
 }
