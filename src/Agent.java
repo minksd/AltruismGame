@@ -1,19 +1,18 @@
-import java.util.List;
-
 public class Agent {
-    private double resources = 0;
-    private Choice[] actions;
+	private double resources = 0;
+	private Choice[] actions;
 
-    public Agent(Choice[] actions){
-	this.actions = actions;
-    }
-    public Choice getChoice(int tick){
-	return actions[tick];
-    }
+	public Agent(Choice[] actions) {
+		this.actions = actions;
+	}
 
-    public void updateResource(double amount) {
-	resources += amount;
-    }
+	public Choice getChoice(int tick) {
+		return actions[tick];
+	}
+
+	public void updateResource(double amount) {
+		resources += amount;
+	}
 
 	public double getResources() {
 		return resources;
@@ -29,5 +28,9 @@ public class Agent {
 		if (numWar == 0)
 			return 0;
 		return (int) Math.round(((float) numWar / (float) actions.length) * 100);
+	}
+
+	public Choice[] getActions(){
+		return actions;
 	}
 }

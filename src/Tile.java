@@ -1,6 +1,5 @@
 import java.util.List;
 import java.util.ArrayList;
-import java.lang.Exception;
 
 public class Tile {
     private int baseResources;
