@@ -1,27 +1,46 @@
 import java.util.Random;
+import java.util.ArrayList;
 
 public class GeneticAlgorithm {
 	private int numGenerations = 10000;
-	private int mutationRate = 20;
-	private int numAgents = 25;
-	private int numTicks = 50;
+	private int mutationRate = 3;
+	private int numAgents = 100;
+	private int numTicks = 100;
 	private Agent[] agents;
 	private Random rand = new Random();
+        private double[] distHist = new double[numGenerations];
+        private double[] bestHist = new double[numGenerations];
+        private boolean distributeInitialChoice = true;
 
 	public static void main(String[] args) {
 		GeneticAlgorithm ga = new GeneticAlgorithm();
 		ga.createAgents();
 		ga.optimize();
+		ga.printResults(10);
 	}
 
-	public Choice getChoiceFromDouble(double choice) {
+    private Choice getChoiceFromDouble(double choice, double choiceNum, int agentNum) {
+	    if (distributeInitialChoice){
+		choice = distributeInitialChoice(choiceNum, ( (double)agentNum)/( (double) numAgents), .3);
+	    }
 		if (Math.round(choice) == 0) {
 			return Choice.War;
 		} else {
 			return Choice.Peace;
 		}
 	}
-
+        
+    private double distributeInitialChoice(double choiceNum ,double lowerBound, double spread){
+	if (choiceNum/numTicks < lowerBound){
+	    return 0;
+	}
+	else if (choiceNum/numTicks > lowerBound + spread){
+	    return 0;
+	}
+	else {
+	    return 1;
+	}
+    }
 	private void createAgents() {
 		agents = new Agent[numAgents];
 
@@ -29,7 +48,7 @@ public class GeneticAlgorithm {
 			Choice[] choices = new Choice[numTicks];
 
 			for (int tick = 0; tick < numTicks; tick++) {
-				choices[tick] = getChoiceFromDouble(rand.nextDouble());
+			    choices[tick] = getChoiceFromDouble(rand.nextDouble(), tick, agentNum);
 			}
 			agents[agentNum] = new Agent(choices);
 		}
@@ -42,12 +61,15 @@ public class GeneticAlgorithm {
 
 	private void optimize() {
 		for (int curGen = 1; curGen <= numGenerations; curGen++) {
-			System.out.println("\nCurrent Generation: " + curGen + "\n");
+		        System.out.println("\nCurrent Generation: " + curGen + "\n");
 			buildGame();
-			System.out.println("Best Agent: \n" + getBestAgent().getPercentageWar() + "% : " + getBestAgent().getResources());
+			//System.out.println("Average Dist: \n" + getAvgDist() + "%");
+			distHist[curGen-1] = getAvgDist();
+			//System.out.println("Best Agent: \n" + getBestAgent().getPercentageWar() + "% : " + getBestAgent().getResources());
+			bestHist[curGen-1] = getBestAgent().getResources();
 			agents = mutate(breed(select(agents)));
 		}
-
+		
 	}
 
 	private Agent[] select(Agent[] agents) {
@@ -102,4 +124,21 @@ public class GeneticAlgorithm {
 		}
 		return bestAgent;
 	}
+    private double getAvgDist(){
+	double total = 0;
+	for (Agent agent: agents){
+	    total += agent.getPercentageWar();
+	}
+	return total/numAgents; 
+    }
+    public void printResults(int numSections){
+	ArrayList<Double> distSections = new ArrayList<Double>();
+	ArrayList<Double> bestSections = new ArrayList<Double>();
+	for (int curSection = 1; curSection <= numSections; curSection++){
+	    distSections.add(distHist[(int) ((numGenerations - 1) * ((double)curSection/numSections))]);
+	    bestSections.add(bestHist[(int) ((numGenerations - 1) * ((double)curSection/numSections))]);
+	}
+	System.out.println(distSections);
+	System.out.println(bestSections);
+    }
 }

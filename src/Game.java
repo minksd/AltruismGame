@@ -42,9 +42,9 @@ public class Game {
 			currentTick++;
 		}
 
-		for (Agent agent : agents) {
+		/*		for (Agent agent : agents) {
 			System.out.println(agent.getPercentageWar() + "% : " + agent.getResources());
-		}
+			}*/
 	}
 
 	private void updateTiles() {
