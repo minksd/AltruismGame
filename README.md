@@ -1,6 +1,7 @@
 # AltruismGame
 
-By: Michael Ulivarri and Daniel Minks
+By: Michael Ulivarri - MichaelU0405
+    Daniel Minks - minksd
 
 MIT License
 
